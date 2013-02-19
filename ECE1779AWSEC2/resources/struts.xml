@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+ 
+<struts>
+    <constant name="struts.enable.DynamicMethodInvocation"
+        value="false" />
+    <constant name="struts.devMode" value="false" />
+    <constant name="struts.custom.i18n.resources"
+        value="ApplicationResources" />
+ 
+    <package name="default" extends="struts-default" namespace="/">
+        <action name="login" method="authenticate"
+            class="edu.toronto.ece1779.ec2.web.LoginAction">
+            <result name="user_login_success">/jsp/User.jsp</result>
+            <result name="manager_login_success">/jsp/Manager.jsp</result>
+            <result name="login_failure">/jsp/Login.jsp</result>
+        </action>
+    </package>
+</struts>
