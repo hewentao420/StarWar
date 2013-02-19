@@ -11,7 +11,7 @@ public class LoginAction extends ActionSupport{
 	public static final String LOGIN_FAILURE = "login_failure";
 	
 	private String username;
-    private String password;
+    private String password; 
  
     public String authenticate() {
     	//TODO user name needs to be retrieved from DB while manager name from web.xml
