@@ -5,6 +5,7 @@
 <title>Welcome Manager</title>
 </head>
  
+ 
 <body>
     <h2>Hello Manager: <s:property value="username" />...!</h2>
 </body>

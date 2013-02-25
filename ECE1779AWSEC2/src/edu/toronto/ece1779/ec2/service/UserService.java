@@ -1,5 +1,11 @@
 package edu.toronto.ece1779.ec2.service;
 
-public class UserService {
+import edu.toronto.ece1779.ec2.entity.User;
 
+public interface UserService {
+		
+	public boolean authenticate(User user);
+	
+	public boolean createAccount(User user);
+	
 }
