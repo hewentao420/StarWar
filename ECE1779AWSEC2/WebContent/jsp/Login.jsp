@@ -14,7 +14,7 @@
     <s:submit method="authenticate" key="label.login" align="center" />
 </s:form>
 
-<s:form action="login.action" method="post">
+<s:form action="createAccount.action" method="post">
     <s:textfield name="username" key="label.username" size="20" />
     <s:password name="password" key="label.password" size="20" />
     <s:password name="retypedPassword" key="label.password.retype" size="20" />
