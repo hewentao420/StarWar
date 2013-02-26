@@ -15,5 +15,10 @@
     </s:form>
     
     <h2>Your images...!</h2>
+	<s:iterator value="images" >
+		<a href="www.baidu.com">
+			<img src="https://s3.amazonaws.com/group14_images/<s:property value="key2" />" alt="" width="32" height="32">
+		</a>
+	</s:iterator>
 </body>
 </html>

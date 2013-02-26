@@ -47,8 +47,27 @@ public class ImageDAOImpl implements ImageDAO{
 		
 		return null;
 	}
-	
 
+	@Override
+	public void insertImage(Image image) {
+		try {
+			String queryString = "INSERT INTO images(userId, key1,key2,key3,key4) VALUES(?,?,?,?,?)"; 
+			connection = ConnectionFactory.getInstance().getConnection();
+			ptmt = connection.prepareStatement(queryString);
+			ptmt.setInt(1, image.getUserId());
+			ptmt.setString(2, image.getKey1());
+			ptmt.setString(3, image.getKey2());
+			ptmt.setString(4, image.getKey3());
+			ptmt.setString(5, image.getKey4());
+            ptmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			closeAll();
+		}
+	}
+
+	
 	private void closeAll() {
 		try {
 		     if (ptmt != null)

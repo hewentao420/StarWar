@@ -14,4 +14,10 @@ public class ImageServieImpl implements ImageService {
 		return imageDao.getUserImages(userId);
 	}
 
+	@Override
+	public void addImage(Image image) {
+		ImageDAO imageDao = new ImageDAOImpl();
+		imageDao.insertImage(image);
+	}
+
 }

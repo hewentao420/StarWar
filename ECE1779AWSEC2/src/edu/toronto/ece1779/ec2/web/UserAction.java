@@ -31,9 +31,10 @@ public class UserAction extends ActionSupport{
 
 	private static final long serialVersionUID = 1L;
 	
-	private List<Image> images;
-	private User user;
 	private File fileUpload;
+	
+	private String username;
+	private List<Image> images;
 
 	public List<Image> getImages() {
 		return images;
@@ -45,6 +46,8 @@ public class UserAction extends ActionSupport{
 	
 	public String enterUserUI(){
 		Map<String,Object> session = ServletActionContext.getContext().getSession();
+		ImageService imageService = new ImageServieImpl(); 
+		
 		User user = (User) session.get("user");
 		String type = (String) session.get("type");
 		
@@ -58,17 +61,21 @@ public class UserAction extends ActionSupport{
 			return USER_AUTHENTICATE_FAILURE;
 		}
 		
-		ImageService imageService = new ImageServieImpl(); 
+		//update display data
+		setUsername(user.getName());
+		
 		images = imageService.getUserImages(user.getId());
 		
 		return USER_AUTHENTICATE_SUCCESS;
 	}
 	
 	public String uploadImage(){
+		ImageService imageService = new ImageServieImpl();
+		
 		Map<String, Object> session = ServletActionContext.getContext().getSession();
 		User user = (User) session.get("user");
 		String type = (String) session.get("type");
-		
+
 		if(user == null){
 			addActionError(getText("failure.authenticate"));
 			return USER_AUTHENTICATE_FAILURE;
@@ -78,6 +85,7 @@ public class UserAction extends ActionSupport{
 			addActionError(getText("failure.type.authenticate"));
 			return USER_AUTHENTICATE_FAILURE;
 		}
+		
 		
 		//check whether a file was uploaded
 		if(fileUpload == null){
@@ -85,10 +93,23 @@ public class UserAction extends ActionSupport{
 			return FILE_UPLOAD_FAILURE;
 		}
 		
-		//TODO:check whether the file is an image
+		//TODO:check whether the file is an image.
 		
-		String originImageKey = "origin_" + UUID.randomUUID();
-		s3SaveFile(fileUpload,originImageKey);
+		String originImageKey1 = "key1_" + UUID.randomUUID();
+		String thumbnailKey2 = "key2_" + UUID.randomUUID();
+		String transformedImageKey3 = "key3_" + UUID.randomUUID();
+		String transformedImageKey4 = "key4_" + UUID.randomUUID();
+		
+		//TODO: generate transformed images.
+		
+		s3SaveFile(fileUpload,originImageKey1);
+		s3SaveFile(fileUpload,thumbnailKey2);
+		s3SaveFile(fileUpload,transformedImageKey3);
+		s3SaveFile(fileUpload,transformedImageKey4);
+		
+		//add the image in db
+		Image image = new Image(user.getId(),originImageKey1,thumbnailKey2,transformedImageKey3,transformedImageKey4);
+		imageService.addImage(image);
 		
 		return FILE_UPLOAD_SUCCESS;
 	}
@@ -102,20 +123,20 @@ public class UserAction extends ActionSupport{
         s3.setObjectAcl(bucketName, key, CannedAccessControlList.PublicRead);
 	}
 
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-
 	public File getFileUpload() {
 		return fileUpload;
 	}
 
 	public void setFileUpload(File fileUpload) {
 		this.fileUpload = fileUpload;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	

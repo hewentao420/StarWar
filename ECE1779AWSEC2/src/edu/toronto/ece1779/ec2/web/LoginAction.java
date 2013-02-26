@@ -26,7 +26,8 @@ public class LoginAction extends ActionSupport{
     public String authenticate() {
     	String managerName = ServletActionContext.getServletContext().getInitParameter("managerName");
     	String managerPassword = ServletActionContext.getServletContext().getInitParameter("managerPassword");
-    	
+
+    	UserService userService = new UserServiceImpl();
     	Map<String,Object> session = ServletActionContext.getContext().getSession();
     	
     	if(managerName.equals(username) && managerPassword.equals(password)) {
@@ -37,7 +38,6 @@ public class LoginAction extends ActionSupport{
     	}
     	
     	User user = new User(username, password);
-    	UserService userService = new UserServiceImpl();
     	boolean isAuthenticated = userService.authenticate(user);
     	if(isAuthenticated){
     		user = userService.getUser(username);
@@ -58,14 +58,20 @@ public class LoginAction extends ActionSupport{
     		return LOGIN_FAILURE;
     	}
     	
-    	User user = new User(username, password);	
+
     	UserService userService = new UserServiceImpl();
+    	Map<String,Object> session = ServletActionContext.getContext().getSession();
+    	
+    	User user = new User(username, password);	
     	boolean isExistingUserName = userService.createAccount(user);
     	if(isExistingUserName){
     		addActionError(getText("failure.createAccount"));
     		return LOGIN_FAILURE;
     	}
     	else{
+    		User loginUser = userService.getUser(username);
+    		session.put("user", loginUser);
+        	session.put("type","user");
     		return USER_LOGIN_SUCCESS;
     	}
     }
