@@ -16,7 +16,7 @@
     
     <h2>Your images...!</h2>
 	<s:iterator value="images" >
-		<a href="www.baidu.com">
+		<a href="/ECE1779AWSEC2/seeImage.action?imageId=<s:property value="id" />">
 			<img src="https://s3.amazonaws.com/group14_images/<s:property value="key2" />" alt="" width="32" height="32">
 		</a>
 	</s:iterator>

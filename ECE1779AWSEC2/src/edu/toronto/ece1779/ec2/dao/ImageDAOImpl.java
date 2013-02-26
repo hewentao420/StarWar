@@ -28,14 +28,7 @@ public class ImageDAOImpl implements ImageDAO{
             List<Image> images = new ArrayList<Image>();
             
             while(rs.next()) {
-            	Image image = new Image();
-            	image.setId(rs.getInt(1));
-            	image.setUserId(rs.getInt(2));
-            	image.setKey1(rs.getString(3));
-            	image.setKey2(rs.getString(4));
-            	image.setKey3(rs.getString(5));
-            	image.setKey4(rs.getString(6));
-            	
+            	Image image = getImageFromResultSet();
             	images.add(image);
             }
             return images;
@@ -46,6 +39,17 @@ public class ImageDAOImpl implements ImageDAO{
 		}
 		
 		return null;
+	}
+
+	private Image getImageFromResultSet() throws SQLException {
+		Image image = new Image();
+		image.setId(rs.getInt(1));
+		image.setUserId(rs.getInt(2));
+		image.setKey1(rs.getString(3));
+		image.setKey2(rs.getString(4));
+		image.setKey3(rs.getString(5));
+		image.setKey4(rs.getString(6));
+		return image;
 	}
 
 	@Override
@@ -79,6 +83,28 @@ public class ImageDAOImpl implements ImageDAO{
 		} catch (Exception e) {
 		     e.printStackTrace();
 		}
+	}
+
+	@Override
+	public Image getImage(int imageId) {
+		try {
+			String queryString = "SELECT * FROM images WHERE id = ?"; 
+			connection = ConnectionFactory.getInstance().getConnection();
+			ptmt = connection.prepareStatement(queryString);
+            ptmt.setInt(1, imageId);
+            rs = ptmt.executeQuery();
+            
+            if(rs.next()) {
+            	Image image = getImageFromResultSet();
+                return image;
+            }
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			closeAll();
+		}
+		
+		return null;
 	}
 
 }

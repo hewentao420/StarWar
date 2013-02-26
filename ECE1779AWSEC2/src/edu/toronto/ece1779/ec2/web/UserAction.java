@@ -35,13 +35,19 @@ public class UserAction extends ActionSupport{
 	
 	private String username;
 	private List<Image> images;
-
-	public List<Image> getImages() {
-		return images;
-	}
-
-	public void setImages(List<Image> images) {
-		this.images = images;
+	private Image image;
+	
+	private int imageId;
+	
+	public String seeImage(){
+		ImageService imageService = new ImageServieImpl(); 
+		image= imageService.getImage(imageId);
+		
+		if(image == null){
+			return ERROR;
+		}
+		
+		return SUCCESS;
 	}
 	
 	public String enterUserUI(){
@@ -139,6 +145,29 @@ public class UserAction extends ActionSupport{
 		this.username = username;
 	}
 
+	public Image getImage() {
+		return image;
+	}
+
+	public void setImage(Image image) {
+		this.image = image;
+	}
+
+	public List<Image> getImages() {
+		return images;
+	}
+
+	public void setImages(List<Image> images) {
+		this.images = images;
+	}
+
+	public int getImageId() {
+		return imageId;
+	}
+
+	public void setImageId(int imageId) {
+		this.imageId = imageId;
+	}
 	
 	
 }

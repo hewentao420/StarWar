@@ -6,6 +6,10 @@
 </head>
  
 <body>
-    <h2>This is an image page..</h2>
+    
+	<img src="https://s3.amazonaws.com/group14_images/<s:property value="image.key1" />" alt="">
+	<img src="https://s3.amazonaws.com/group14_images/<s:property value="image.key2" />" alt="">
+	<img src="https://s3.amazonaws.com/group14_images/<s:property value="image.key3" />" alt="">
+	<img src="https://s3.amazonaws.com/group14_images/<s:property value="image.key4" />" alt="">
 </body>
 </html>

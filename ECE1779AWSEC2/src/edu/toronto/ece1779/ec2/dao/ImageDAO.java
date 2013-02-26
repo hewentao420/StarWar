@@ -9,4 +9,6 @@ public interface ImageDAO {
 	List<Image> getUserImages(int userId);
 
 	void insertImage(Image image);
+
+	Image getImage(int imageId);
 }

@@ -48,5 +48,11 @@
             	<param name="namespace">/</param>
             </result>
         </action>
+        
+        <action name="seeImage" method="seeImage"
+            class="edu.toronto.ece1779.ec2.web.UserAction">
+            <result name="success">/WEB-INF/jsp/Image.jsp</result>
+            <result name="error">/WEB-INF/jsp/Login.jsp</result>
+        </action>
     </package>
 </struts>

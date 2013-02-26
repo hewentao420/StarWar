@@ -20,4 +20,11 @@ public class ImageServieImpl implements ImageService {
 		imageDao.insertImage(image);
 	}
 
+	@Override
+	public Image getImage(int imageId) {
+		// TODO Auto-generated method stub
+		ImageDAO imageDao = new ImageDAOImpl();
+		return imageDao.getImage(imageId);
+	}
+
 }

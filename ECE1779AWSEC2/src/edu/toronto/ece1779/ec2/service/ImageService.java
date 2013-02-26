@@ -8,4 +8,6 @@ public interface ImageService {
 	public List<Image> getUserImages(int userId);
 
 	public void addImage(Image image);
+
+	public Image getImage(int imageId);
 }
