@@ -8,4 +8,6 @@ public interface UserService {
 	
 	public boolean createAccount(User user);
 	
+	public User getUser(String userName);
+	
 }

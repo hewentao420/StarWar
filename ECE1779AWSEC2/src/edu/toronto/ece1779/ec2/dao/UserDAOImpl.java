@@ -61,18 +61,47 @@ public class UserDAOImpl implements UserDAO {
 			isExistingUserName = true;
 			e.printStackTrace();
 		} finally {
-			try {
-                 if (ptmt != null)
-                	 ptmt.close();
-                 if (connection != null)
-                     connection.close();
-			} catch (SQLException e) {
-                 e.printStackTrace();
-			} catch (Exception e) {
-                 e.printStackTrace();
-			}
+			closeAll();
 		}
 		return isExistingUserName;
+	}
+	
+	public User getUser(String username){
+		try {
+			String queryString = "SELECT * FROM users WHERE login = ?"; 
+			connection = ConnectionFactory.getInstance().getConnection();
+			ptmt = connection.prepareStatement(queryString);
+            ptmt.setString(1, username);
+            rs = ptmt.executeQuery();
+            if(rs.next()) {
+            	User user = new User();
+            	user.setId(rs.getInt(1));
+            	user.setName(rs.getString(2));
+            	user.setPassword(rs.getString(3));
+            	
+            	return user;
+            }
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			closeAll();
+		}
+		
+		return null;
+	}
+	
+
+	private void closeAll() {
+		try {
+		     if (ptmt != null)
+		    	 ptmt.close();
+		     if (connection != null)
+		         connection.close();
+		} catch (SQLException e) {
+		     e.printStackTrace();
+		} catch (Exception e) {
+		     e.printStackTrace();
+		}
 	}
 	
 }

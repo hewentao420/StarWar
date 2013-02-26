@@ -17,4 +17,9 @@ public class UserServiceImpl implements UserService {
 		return userDAO.createAccount(user);
 	}
 
+	public User getUser(String username){
+		UserDAO userDAO = new UserDAOImpl();
+		return userDAO.getUser(username);
+	}
+	
 }

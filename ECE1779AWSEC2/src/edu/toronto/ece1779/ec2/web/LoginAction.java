@@ -1,5 +1,7 @@
 package edu.toronto.ece1779.ec2.web;
 
+import java.util.Map;
+
 import org.apache.struts2.ServletActionContext;
 
 import com.opensymphony.xwork2.ActionSupport;
@@ -24,7 +26,13 @@ public class LoginAction extends ActionSupport{
     public String authenticate() {
     	String managerName = ServletActionContext.getServletContext().getInitParameter("managerName");
     	String managerPassword = ServletActionContext.getServletContext().getInitParameter("managerPassword");
+    	
+    	Map<String,Object> session = ServletActionContext.getContext().getSession();
+    	
     	if(managerName.equals(username) && managerPassword.equals(password)) {
+    		User user = new User(username, password);
+    		session.put("user", user);
+        	session.put("type","manager");
     		return MANAGER_LOGIN_SUCCESS;
     	}
     	
@@ -32,6 +40,9 @@ public class LoginAction extends ActionSupport{
     	UserService userService = new UserServiceImpl();
     	boolean isAuthenticated = userService.authenticate(user);
     	if(isAuthenticated){
+    		user = userService.getUser(username);
+    		session.put("user", user);
+        	session.put("type","user");
     		return USER_LOGIN_SUCCESS;
     	}
     	else {
@@ -57,6 +68,10 @@ public class LoginAction extends ActionSupport{
     	else{
     		return USER_LOGIN_SUCCESS;
     	}
+    }
+    
+    public String enterLoginPage(){
+    	return SUCCESS;
     }
  
     

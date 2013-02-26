@@ -2,10 +2,10 @@
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <html>
 <head>
-<title>Welcome User</title>
+<title>Image Page </title>
 </head>
  
 <body>
-    <h2>Hello User: <s:property value="username" />...!</h2>
+    <h2>This is an image page..</h2>
 </body>
 </html>

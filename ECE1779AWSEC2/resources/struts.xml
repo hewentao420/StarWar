@@ -13,15 +13,28 @@
     <package name="default" extends="struts-default" namespace="/">
         <action name="login" method="authenticate"
             class="edu.toronto.ece1779.ec2.web.LoginAction">
-            <result name="manager_login_success">/jsp/Manager.jsp</result>
-            <result name="user_login_success">/jsp/User.jsp</result>
-            <result name="login_failure">/jsp/Login.jsp</result>
+            <result name="manager_login_success">/WEB-INF/jsp/Manager.jsp</result>
+            <result name="user_login_success" >/WEB-INF/jsp/User.jsp</result>
+            <result name="login_failure">/WEB-INF/jsp/Login.jsp</result>
         </action>
         
         <action name="createAccount" method="createAccount"
             class="edu.toronto.ece1779.ec2.web.LoginAction">
-            <result name="user_login_success">/jsp/User.jsp</result>
-            <result name="login_failure">/jsp/Login.jsp</result>
+            <result name="user_login_success">/WEB-INF/jsp/User.jsp</result>
+            <result name="login_failure">/WEB-INF/jsp/Login.jsp</result>
+        </action>
+        
+         <action name="enterUserUI" method="enterUserUI"
+            class="edu.toronto.ece1779.ec2.web.UserAction">
+            <result name="user_authenticate_success">/WEB-INF/jsp/User.jsp</result>
+            <result name="user_authenticate_failure">/WEB-INF/jsp/Login.jsp</result>
+        </action>
+        
+        <action name="uploadImage" method="uploadImage" 
+            class="edu.toronto.ece1779.ec2.web.UserAction">
+            <result name="user_authenticate_failure">/WEB-INF/jsp/Login.jsp</result>
+            <result name="file_upload_success">/WEB-INF/jsp/User.jsp</result>
+            <result name="file_upload_failure">/WEB-INF/jsp/User.jsp</result>
         </action>
     </package>
 </struts>
