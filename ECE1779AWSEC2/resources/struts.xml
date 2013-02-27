@@ -54,5 +54,26 @@
             <result name="success">/WEB-INF/jsp/Image.jsp</result>
             <result name="error">/WEB-INF/jsp/Login.jsp</result>
         </action>
+        
+        
+        <!-- START: sample testing code -->
+        <action name="createInstances" method="createInstances"
+            class="edu.toronto.ece1779.ec2.web.ManagerAction">
+            <result name="test">/WEB-INF/jsp/Manager.jsp</result>
+        </action>
+        <action name="startInstances" method="startInstances"
+            class="edu.toronto.ece1779.ec2.web.ManagerAction">
+            <result name="test">/WEB-INF/jsp/Manager.jsp</result>
+        </action>
+        <action name="stopInstances" method="stopInstances"
+            class="edu.toronto.ece1779.ec2.web.ManagerAction">
+            <result name="test">/WEB-INF/jsp/Manager.jsp</result>
+        </action>                
+        <action name="watchCloud" method="watchCloud"
+            class="edu.toronto.ece1779.ec2.web.ManagerAction">
+            <result name="test">/WEB-INF/jsp/Manager.jsp</result>
+        </action>         
+        <!-- END: sample testing code -->
+        
     </package>
 </struts>
