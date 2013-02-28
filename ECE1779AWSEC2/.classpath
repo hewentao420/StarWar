@@ -19,5 +19,6 @@
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="C:/Program Files (x86)/ImageMagick-6.3.9-Q8"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
