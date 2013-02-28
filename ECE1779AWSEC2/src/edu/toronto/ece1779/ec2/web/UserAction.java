@@ -149,7 +149,7 @@ public class UserAction extends ActionSupport {
 
 			// forth image
 			ImageTransformation.addTextToImage(fileUpload.getPath(),
-					filePathTrans, "Group 4");
+					filePathTrans, "Group 4 Logo");
 			fileTrans = new File(filePathTrans);
 			s3SaveFile(fileTrans, transformedImageKey4);
 			fileTrans.delete();
