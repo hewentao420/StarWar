@@ -27,6 +27,9 @@ import com.amazonaws.services.ec2.model.StartInstancesRequest;
 import com.amazonaws.services.ec2.model.StopInstancesRequest;
 
 import edu.toronto.ece1779.awsAccess.AwsAccessManager;
+import edu.toronto.ece1779.ec2.dao.ManagerDAO;
+import edu.toronto.ece1779.ec2.dao.ManagerDAOImpl;
+import edu.toronto.ece1779.ec2.entity.ManagerConfig;
 import edu.toronto.ece1779.ec2.entity.Worker;
 
 public class ManagerServiceImpl implements ManagerService {
@@ -57,7 +60,7 @@ public class ManagerServiceImpl implements ManagerService {
 		
 		return runningWorkers;
 	}
-	
+
 	
     public Map<String, Double> retrieveCPUUsageMap(){
     	Map<String, Double> cpuUsageMap = new HashMap<String, Double>();
@@ -214,5 +217,17 @@ public class ManagerServiceImpl implements ManagerService {
 		BasicAWSCredentials awsCredentials = AwsAccessManager.getInstance().getAWSCredentials();
         AmazonCloudWatch cw = new AmazonCloudWatchClient(awsCredentials);
         return cw;
+	}
+
+
+	public void updateManagerConfig(ManagerConfig config) {
+		ManagerDAO managerDAO = new ManagerDAOImpl();
+		managerDAO.updateManagerConfig(config);
+	}
+
+
+	public ManagerConfig retrieveManagerConfig() {
+		ManagerDAO managerDAO = new ManagerDAOImpl();
+		return managerDAO.retrieveManagerConfig();
 	}
 }

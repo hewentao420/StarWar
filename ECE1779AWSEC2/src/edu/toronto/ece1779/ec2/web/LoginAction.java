@@ -7,6 +7,7 @@ import org.apache.struts2.ServletActionContext;
 
 import com.opensymphony.xwork2.ActionSupport;
 
+import edu.toronto.ece1779.ec2.entity.ManagerConfig;
 import edu.toronto.ece1779.ec2.entity.User;
 import edu.toronto.ece1779.ec2.entity.Worker;
 import edu.toronto.ece1779.ec2.service.ManagerService;
@@ -27,12 +28,17 @@ public class LoginAction extends ActionSupport{
     private String retypedPassword;
     private List<Worker> workers;
  
+	private double thresholdGrow;
+	private double thresholdShrink;
+	private int ratioExpand;
+	private int ratioShrink;
     
     public String authenticate() {
     	String managerName = ServletActionContext.getServletContext().getInitParameter("managerName");
     	String managerPassword = ServletActionContext.getServletContext().getInitParameter("managerPassword");
 
     	UserService userService = new UserServiceImpl();
+    	@SuppressWarnings("unchecked")
     	Map<String,Object> session = ServletActionContext.getContext().getSession();
     	
     	if(managerName.equals(username) && managerPassword.equals(password)) {
@@ -41,6 +47,13 @@ public class LoginAction extends ActionSupport{
         	session.put("type","manager");
     		ManagerService managerService = new ManagerServiceImpl();	
     		this.workers = managerService.retrieveRunningWorkersInfo();
+
+        	ManagerConfig config = managerService.retrieveManagerConfig();
+        	this.thresholdGrow = config.getThresholdGrow();
+        	this.thresholdShrink = config.getThresholdShrink();
+        	this.ratioExpand = config.getRatioExpand();
+        	this.ratioShrink = config.getRatioShrink();
+        	
     		return MANAGER_LOGIN_SUCCESS;
     	}
     	
@@ -49,7 +62,7 @@ public class LoginAction extends ActionSupport{
     	if(isAuthenticated){
     		user = userService.getUser(username);
     		session.put("user", user);
-        	session.put("type","user");
+        	session.put("type","user");   	
     		return USER_LOGIN_SUCCESS;
     	}
     	else {
@@ -66,6 +79,7 @@ public class LoginAction extends ActionSupport{
     	}
     	
     	UserService userService = new UserServiceImpl();
+    	@SuppressWarnings("unchecked")
     	Map<String,Object> session = ServletActionContext.getContext().getSession();
     	
     	User user = new User(username, password);	
@@ -117,6 +131,46 @@ public class LoginAction extends ActionSupport{
 
 	public void setWorkers(List<Worker> workers) {
 		this.workers = workers;
+	}
+
+
+	public double getThresholdGrow() {
+		return thresholdGrow;
+	}
+
+
+	public void setThresholdGrow(double thresholdGrow) {
+		this.thresholdGrow = thresholdGrow;
+	}
+
+
+	public double getThresholdShrink() {
+		return thresholdShrink;
+	}
+
+
+	public void setThresholdShrink(double thresholdShrink) {
+		this.thresholdShrink = thresholdShrink;
+	}
+
+
+	public int getRatioExpand() {
+		return ratioExpand;
+	}
+
+
+	public void setRatioExpand(int ratioExpand) {
+		this.ratioExpand = ratioExpand;
+	}
+
+
+	public int getRatioShrink() {
+		return ratioShrink;
+	}
+
+
+	public void setRatioShrink(int ratioShrink) {
+		this.ratioShrink = ratioShrink;
 	}
     
 	

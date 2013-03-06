@@ -21,8 +21,5 @@
     <s:submit method="createAccount" key="label.createAccount" align="center" />
 </s:form>
 
-
-<a href="jsp/TestAWSConnection.jsp">Test AWS Connection</a>
-
 </body>
 </html>
