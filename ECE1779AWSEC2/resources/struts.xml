@@ -56,24 +56,23 @@
         </action>
         
         
-        <!-- START: sample testing code -->
-        <action name="createInstances" method="createInstances"
+        <action name="adjustWorkerPool" method="adjustWorkerPool"
             class="edu.toronto.ece1779.ec2.web.ManagerAction">
-            <result name="test">/WEB-INF/jsp/Manager.jsp</result>
+            <result name="success">/WEB-INF/jsp/Manager.jsp</result>
+            <result name="error">/WEB-INF/jsp/Manager.jsp</result>
         </action>
-        <action name="startInstances" method="startInstances"
+        
+        <action name="configure" method="configure"
             class="edu.toronto.ece1779.ec2.web.ManagerAction">
-            <result name="test">/WEB-INF/jsp/Manager.jsp</result>
-        </action>
-        <action name="stopInstances" method="stopInstances"
+            <result name="success">/WEB-INF/jsp/Manager.jsp</result>
+            <result name="error">/WEB-INF/jsp/Manager.jsp</result>
+        </action>     
+        
+        <action name="refresh" method="refresh"
             class="edu.toronto.ece1779.ec2.web.ManagerAction">
-            <result name="test">/WEB-INF/jsp/Manager.jsp</result>
-        </action>                
-        <action name="watchCloud" method="watchCloud"
-            class="edu.toronto.ece1779.ec2.web.ManagerAction">
-            <result name="test">/WEB-INF/jsp/Manager.jsp</result>
-        </action>         
-        <!-- END: sample testing code -->
+            <result name="success">/WEB-INF/jsp/Manager.jsp</result>
+            <result name="error">/WEB-INF/jsp/Manager.jsp</result>
+        </action>              
         
     </package>
 </struts>

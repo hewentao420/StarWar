@@ -1,5 +1,6 @@
 package edu.toronto.ece1779.ec2.web;
 
+import java.util.List;
 import java.util.Map;
 
 import org.apache.struts2.ServletActionContext;
@@ -7,6 +8,9 @@ import org.apache.struts2.ServletActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 
 import edu.toronto.ece1779.ec2.entity.User;
+import edu.toronto.ece1779.ec2.entity.Worker;
+import edu.toronto.ece1779.ec2.service.ManagerService;
+import edu.toronto.ece1779.ec2.service.ManagerServiceImpl;
 import edu.toronto.ece1779.ec2.service.UserService;
 import edu.toronto.ece1779.ec2.service.UserServiceImpl;
 
@@ -21,6 +25,7 @@ public class LoginAction extends ActionSupport{
 	private String username;
     private String password; 
     private String retypedPassword;
+    private List<Worker> workers;
  
     
     public String authenticate() {
@@ -34,6 +39,8 @@ public class LoginAction extends ActionSupport{
     		User user = new User(username, password);
     		session.put("user", user);
         	session.put("type","manager");
+    		ManagerService managerService = new ManagerServiceImpl();	
+    		this.workers = managerService.retrieveRunningWorkersInfo();
     		return MANAGER_LOGIN_SUCCESS;
     	}
     	
@@ -58,7 +65,6 @@ public class LoginAction extends ActionSupport{
     		return LOGIN_FAILURE;
     	}
     	
-
     	UserService userService = new UserServiceImpl();
     	Map<String,Object> session = ServletActionContext.getContext().getSession();
     	
@@ -89,7 +95,6 @@ public class LoginAction extends ActionSupport{
 		this.username = username;
 	}
 
-
 	public String getPassword() {
         return password;
     }
@@ -105,5 +110,14 @@ public class LoginAction extends ActionSupport{
 	public void setRetypedPassword(String retypedPassword) {
 		this.retypedPassword = retypedPassword;
 	}
+
+	public List<Worker> getWorkers() {
+		return workers;
+	}
+
+	public void setWorkers(List<Worker> workers) {
+		this.workers = workers;
+	}
     
+	
 }

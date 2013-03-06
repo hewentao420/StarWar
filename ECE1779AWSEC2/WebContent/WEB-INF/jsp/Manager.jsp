@@ -5,29 +5,44 @@
 <title>Welcome Manager</title>
 </head>
  
- 
 <body>
     <h2>Hello Manager: <s:property value="username" />...!</h2>
+    <s:actionerror />
+    <hr/>
     
-    <!-- START: Test manipulating workers -->
-    <h5>WARNING: Be careful!</h5>
-    <h5>Every time you click "Create Instances" button, a new EC2 instance will be created.</h5>
-    <h5>Every time you click "Start Instances" button, two hard coded existing instances will be started.</h5>
-    <h5>Every time you click "Stop Instances" button, the two hard coded existing instances will be stopped.</h5>
+    <div>
+    	<h3>You have the following workers: </h3>
+    	<s:iterator value="workers">
+    		Worker ID:<s:property value="id" />
+    		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    		CPU Usage:<s:property value="cpuUsage" />
+    		<br/>
+    	</s:iterator>
+    		
+    	<s:form action="refresh.action" method="post">
+    		<tr><s:submit method="refresh" key="label.refresh" align="center" /></tr>	
+   		</s:form>
+    </div>
     
-    <s:form action="createInstances.action" method="post">
-    	<s:submit method="createInstances" key="label.createInstances" align="center" />
-	</s:form>
-    <s:form action="startInstances.action" method="post">
-    	<s:submit method="startInstances" key="label.startInstances" align="center" />
-	</s:form>
-    <s:form action="stopInstances.action" method="post">
-    	<s:submit method="stopInstances" key="label.stopInstances" align="center" />
-	</s:form>	
-    <s:form action="watchCloud.action" method="post">
-    	<s:submit method="watchCloud" key="label.watchCloud" align="center" />
-	</s:form>		
-	<!-- END: Test manipulating workers -->
+    <hr/>
+     
+    <s:form action="adjustWorkerPool.action" method="post">
+    	<table>
+    		<tr><s:textfield name="increaseNumber" key="label.increase" size="1" /></tr>
+    		<tr><s:textfield name="reduceNumber" key="label.reduce" size="1" /></tr>
+    		<tr><s:submit method="adjustWorkerPool" key="label.adjustWorkerPool" align="center" /></tr>	
+    	</table>
+    </s:form>
+    
+    <hr/>
+    
+    <s:form action="configure.action" method="post">
+    	<s:textfield name="thresholdGrow" key="label.threshold.grow" size="5" />
+    	<s:textfield name="thresholdShrink" key="label.threshold.shrink" size="5" />
+    	<s:textfield name="ratioExpand" key="label.ratio.expand" size="5" />
+    	<s:textfield name="ratioShrink" key="label.ratio.shrink" size="5" />
+    	<s:submit method="configure" key="label.configure" align="center" />
+    </s:form>
 
 </body>
 </html>
