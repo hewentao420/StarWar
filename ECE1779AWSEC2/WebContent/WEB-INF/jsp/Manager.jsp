@@ -4,8 +4,35 @@
 <head>
 <title>Welcome Manager</title>
 <style type="text/css">
+body {
+	margin: 0;
+	padding: 0;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 13px;
+	color: #F1F5F8;
+	background: #000000 url(images/background.png) repeat-x;
+	padding-left:10px;
+	padding-right:10px;
+}
+
 input {
 	float: left;
+}
+
+#refresh_label_refresh{
+	width:150px;
+}
+
+#adjustWorkerPool_label_adjustWorkerPool{
+	width:150px;
+}
+
+#configure_label_configure{
+	width:150px;
+}
+ 
+.tdLabel{
+	width:350px;
 }
 
 h1{font-family: Arial, Helvetica, sans-serif;
