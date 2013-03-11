@@ -11,7 +11,7 @@ body {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 13px;
 	color: #F1F5F8;  
-	background: #000000 url(images/background.png) repeat-x;
+	background: #000000 url(../images/background.png) repeat-x; 
 }
 
 #topContent #rightTopContent {
@@ -136,42 +136,21 @@ input{
 	<div class="container" id="topContent">
 		<div class="grid_4">
 			<h1>Cloud Images</h1>
-			<h2>
-				Hello,
-				<s:property value="username" />
-				!
-			</h2>
+			<h2>The gallery in the cloud</h2>
 		</div>
 		<div class="grid_8" id="rightTopContent">
-			<a href="./">home</a> | <a href="./jsp/Contact.jsp">contact</a>
+			<a href="../">home</a> | <a href="#">contact</a>
 		</div>
 	</div>
 	<div class="container">
-		<div class="title">Your images...!</div>
 		<div class="content">
-			<s:iterator value="images">
-				<div class="image-fram">
-					<a
-						href="/ECE1779AWSEC2/seeImage.action?imageId=<s:property value="id" />">
-						<img class="image"
-						src="https://s3.amazonaws.com/group14_images/<s:property value="key2" />"
-						alt="">
-					</a>
-				</div>
-
-			</s:iterator>
-		</div>
-	</div>
-	<div class="container" id="upload">
-		<s:actionerror />
-		<div class="title">Upload your image...!</div>
-
-		<div class="content">
-			<s:form action="uploadImage.action" method="POST"
-				enctype="multipart/form-data">
-				<s:file name="fileUpload" key="label.selectFile" size="40" />
-				<s:submit value="submit" name="submit" />
-			</s:form>
+			This is the course project for ECE1779 Introduction of Cloud Computing in University of Toronto.<br>
+			<br>
+			Students:<br>
+			Marcy Mengxi Liao: marcyliew@gmail.com<br>
+			Jason Wentao He: hewentao420@gmail.com<br>
+			David Zeyu Wang: zeyudavid.wang@mail.utoronto.ca<br>
+			Henry Zhang: hzyxzhang@gmail.com<br>
 		</div>
 	</div>
 </body>

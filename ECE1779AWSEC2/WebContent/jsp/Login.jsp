@@ -134,7 +134,7 @@ input{
 			<h2>The gallery in the cloud</h2>
 		</div>
 		<div class="grid_8" id="rightTopContent">
-			<a href="./">home</a> | <a href="#">contact</a>
+			<a href="./">home</a> | <a href="./jsp/Contact.jsp">contact</a>
 		</div>
 	</div>
 	<div class="container">
