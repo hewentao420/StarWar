@@ -152,8 +152,8 @@ input{
 
 			<div class="login_titile">New User</div>
 			<s:form action="createAccount.action" method="post" id="form2">
-				<s:textfield name="username" key="label.username"/>
-				<s:password name="password" key="label.password" />
+				<s:textfield name="newUsername" key="label.username"/>
+				<s:password name="newPassword" key="label.password" />
 				<s:password name="retypedPassword" key="label.password.retype"
 					size="20" />
 				<s:submit method="createAccount" key="label.createAccount"

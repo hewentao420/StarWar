@@ -24,7 +24,9 @@ public class LoginAction extends ActionSupport{
 	public static final String LOGIN_FAILURE = "login_failure";
 	
 	private String username;
+	private String newUsername;
     private String password; 
+    private String newPassword;
     private String retypedPassword;
     private List<Worker> workers;
  
@@ -73,7 +75,7 @@ public class LoginAction extends ActionSupport{
     
     
     public String createAccount() {
-    	if(!password.equals(retypedPassword)) {
+    	if(!newPassword.equals(retypedPassword)) {
     		addActionError(getText("failure.password.not.match"));
     		return LOGIN_FAILURE;
     	}
@@ -82,21 +84,43 @@ public class LoginAction extends ActionSupport{
     	@SuppressWarnings("unchecked")
     	Map<String,Object> session = ServletActionContext.getContext().getSession();
     	
-    	User user = new User(username, password);	
+    	User user = new User(newUsername, newPassword);	
     	boolean isExistingUserName = userService.createAccount(user);
-    	if(isExistingUserName){
+    	if(isExistingUserName || newUsername.equals("Bill")){
     		addActionError(getText("failure.createAccount"));
     		return LOGIN_FAILURE;
     	}
     	else{
-    		User loginUser = userService.getUser(username);
+    		User loginUser = userService.getUser(newUsername);
     		session.put("user", loginUser);
         	session.put("type","user");
+        	this.username = this.newUsername;
+        	this.password = this.newPassword;
     		return USER_LOGIN_SUCCESS;
     	}
     }
     
-    public String enterLoginPage(){
+    public String getNewUsername() {
+		return newUsername;
+	}
+
+
+	public void setNewUsername(String newUsername) {
+		this.newUsername = newUsername;
+	}
+
+
+	public String getNewPassword() {
+		return newPassword;
+	}
+
+
+	public void setNewPassword(String newPassword) {
+		this.newPassword = newPassword;
+	}
+
+
+	public String enterLoginPage(){
     	return SUCCESS;
     }
  
