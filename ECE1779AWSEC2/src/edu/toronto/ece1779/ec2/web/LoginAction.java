@@ -36,6 +36,11 @@ public class LoginAction extends ActionSupport{
 	private int ratioShrink;
     
     public String authenticate() {
+		if (username.equals("") || password.equals("")) {
+			addActionError(getText("failure.empaty.Name.or.Passwoed"));
+			return LOGIN_FAILURE;
+		}
+    	
     	String managerName = ServletActionContext.getServletContext().getInitParameter("managerName");
     	String managerPassword = ServletActionContext.getServletContext().getInitParameter("managerPassword");
 
@@ -75,6 +80,12 @@ public class LoginAction extends ActionSupport{
     
     
     public String createAccount() {
+		if (newUsername.equals("") || newPassword.equals("")
+				|| retypedPassword.equals("")) {
+			addActionError(getText("failure.empaty.Name.or.Passwoed"));
+			return LOGIN_FAILURE;
+		}
+    	
     	if(!newPassword.equals(retypedPassword)) {
     		addActionError(getText("failure.password.not.match"));
     		return LOGIN_FAILURE;
