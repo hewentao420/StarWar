@@ -14,6 +14,7 @@ public class ManagerDAOImpl implements ManagerDAO{
 
 	Connection connection = null;
 	PreparedStatement ptmt = null;
+	PreparedStatement ptmt2 = null;
 	ResultSet rs = null;
 	
 	@Override
@@ -50,29 +51,55 @@ public class ManagerDAOImpl implements ManagerDAO{
 	public ManagerConfig retrieveManagerConfig() {
 		ManagerConfig config = new ManagerConfig();
 		try {
-			String queryString = "SELECT password FROM users WHERE login = ?"; 
+			String queryString = "SELECT password FROM users WHERE login = ?";
+			String insertString = "insert into users (login, password) values (?,?)";
 			connection = ConnectionFactory.getInstance().getConnection();
 			ptmt = connection.prepareStatement(queryString);
+			ptmt2 = connection.prepareStatement(insertString);
  
 			ptmt.setString(1, "thresholdGrow");
             rs = ptmt.executeQuery();
-            if(rs.next())
-            	config.setThresholdGrow(Double.parseDouble(rs.getString(1)));
+			if (rs.next()) {
+				config.setThresholdGrow(Double.parseDouble(rs.getString(1)));
+			} else {
+				config.setThresholdGrow(0.0);
+				ptmt2.setString(1, "thresholdGrow");
+				ptmt2.setString(2, "0.0");
+	            ptmt2.executeUpdate();
+			}          	
             
             ptmt.setString(1, "thresholdShrink");
             rs = ptmt.executeQuery();
-            if(rs.next())
-            	config.setThresholdShrink(Double.parseDouble(rs.getString(1)));
+			if (rs.next()) {
+				config.setThresholdShrink(Double.parseDouble(rs.getString(1)));
+			} else {
+				config.setThresholdShrink(0.0);
+				ptmt2.setString(1, "thresholdShrink");
+				ptmt2.setString(2, "0.0");
+	            ptmt2.executeUpdate();
+			}          	
             
             ptmt.setString(1, "ratioExpand");
             rs = ptmt.executeQuery();
-            if(rs.next())
-            	config.setRatioExpand(Integer.parseInt(rs.getString(1)));
+			if (rs.next()) {
+				config.setRatioExpand(Integer.parseInt(rs.getString(1)));
+			} else {
+				config.setRatioExpand(0);
+				ptmt2.setString(1, "ratioExpand");
+				ptmt2.setString(2, "0");
+	            ptmt2.executeUpdate();
+			}           	
             
             ptmt.setString(1, "ratioShrink");
             rs = ptmt.executeQuery();
-            if(rs.next())
-            	config.setRatioShrink(Integer.parseInt(rs.getString(1)));
+			if (rs.next()) {
+				config.setRatioShrink(Integer.parseInt(rs.getString(1)));
+			} else {
+				config.setRatioShrink(0);
+				ptmt2.setString(1, "ratioShrink");
+				ptmt2.setString(2, "0");
+	            ptmt2.executeUpdate();
+			}
         	
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -87,6 +114,8 @@ public class ManagerDAOImpl implements ManagerDAO{
 		try {
 		     if (ptmt != null)
 		    	 ptmt.close();
+		     if (ptmt2 != null)
+		    	 ptmt2.close();
 		     if (connection != null)
 		         connection.close();
 		} catch (SQLException e) {
