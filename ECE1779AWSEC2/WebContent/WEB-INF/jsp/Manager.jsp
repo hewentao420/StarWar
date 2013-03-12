@@ -43,6 +43,68 @@ h1{font-family: Arial, Helvetica, sans-serif;
 	margin: 0px;
 	margin-bottom: 10px;}
 </style>
+<script type="text/javascript" >
+	function numbersOnly(myfield, e)
+	{
+	      var key;
+	      var keychar;
+	      if (window.event)
+	        key = window.event.keyCode;
+	      else if (e)
+	        key = e.which;
+	      else
+	        return true;
+	      keychar = String.fromCharCode(key);
+	     
+	      // control keys
+	      if ((key==null) || (key==0) || (key==8) ||
+	         (key==9) || (key==13) || (key==27) )
+	        return true;
+	     
+	      // numbers
+	      else if ((("0123456789.").indexOf(keychar) > -1))
+	        return true;
+	      // decimal point jump
+	      else
+	        return false;
+	}
+	
+	function integersOnly(myfield, e)
+	{
+	      var key;
+	      var keychar;
+	      if (window.event)
+	        key = window.event.keyCode;
+	      else if (e)
+	        key = e.which;
+	      else
+	        return true;
+	      keychar = String.fromCharCode(key);
+	     
+	      // control keys
+	      if ((key==null) || (key==0) || (key==8) ||
+	         (key==9) || (key==13) || (key==27) )
+	        return true;
+	     
+	      // numbers
+	      else if ((("0123456789").indexOf(keychar) > -1))
+	        return true;
+	      // decimal point jump
+	      else
+	        return false;
+	}
+	
+	function clearField(field) {
+        document.getElementsByName(field)[0].value = "";
+    }
+
+	function formatPercent(field) {
+		var y = document.getElementsByName(field)[0].value.substring(0,4);
+		var x = parseFloat(y.substring(0,2) + "." + y.substring(2)).toFixed(2);
+		document.getElementsByName(field)[0].value = x;
+    }
+</script>
+
 </head>
 
 <body>
@@ -76,10 +138,10 @@ h1{font-family: Arial, Helvetica, sans-serif;
 	<s:form action="adjustWorkerPool.action" method="post">
 		<table>
 			<tr>
-				<s:textfield name="increaseNumber" key="label.increase" size="1" />
+				<s:textfield name="increaseNumber" key="label.increase" size="1" onkeypress="return integersOnly(this, event);" onkeydown="clearField('reduceNumber')" maxlength="2"/>
 			</tr>
 			<tr>
-				<s:textfield name="reduceNumber" key="label.reduce" size="1" />
+				<s:textfield name="reduceNumber" key="label.reduce" size="1" onkeypress="return integersOnly(this, event);" onkeydown="clearField('increaseNumber')" maxlength="2"/>
 			</tr>
 			<tr>
 				<s:submit method="adjustWorkerPool" key="label.adjustWorkerPool"
@@ -91,11 +153,11 @@ h1{font-family: Arial, Helvetica, sans-serif;
 	<hr />
 
 	<s:form action="configure.action" method="post">
-		<s:textfield name="thresholdGrow" key="label.threshold.grow" size="5" />
+		<s:textfield name="thresholdGrow" key="label.threshold.grow" size="5" onkeypress="return numbersOnly(this, event);" onchange="formatPercent('thresholdGrow')" />
 		<s:textfield name="thresholdShrink" key="label.threshold.shrink"
-			size="5" />
-		<s:textfield name="ratioExpand" key="label.ratio.expand" size="5" />
-		<s:textfield name="ratioShrink" key="label.ratio.shrink" size="5" />
+			size="5" onkeypress="return numbersOnly(this, event);" onchange="formatPercent('thresholdShrink')"/>
+		<s:textfield name="ratioExpand" key="label.ratio.expand" size="5" onkeypress="return integersOnly(this, event);" maxlength="1"/>
+		<s:textfield name="ratioShrink" key="label.ratio.shrink" size="5" onkeypress="return integersOnly(this, event);" maxlength="1"/>
 		<s:submit method="configure" key="label.configure" align="center" />
 	</s:form>
 
