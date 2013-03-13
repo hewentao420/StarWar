@@ -2,77 +2,87 @@
 <!DOCTYPE struts PUBLIC
     "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
     "http://struts.apache.org/dtds/struts-2.0.dtd">
- 
+
 <struts>
-    <constant name="struts.enable.DynamicMethodInvocation"
-        value="false" />
-    <constant name="struts.devMode" value="false" />
-    <constant name="struts.custom.i18n.resources"
-        value="ApplicationResources" />
- 
-    <package name="default" extends="struts-default" namespace="/">
-        <action name="login" method="authenticate"
-            class="edu.toronto.ece1779.ec2.web.LoginAction">
-            <result name="manager_login_success">/WEB-INF/jsp/Manager.jsp</result>
-            <result name="user_login_success" type="redirectAction">
-            	<param name="actionName">enterUserUI</param>
-            	<param name="namespace">/</param>
-            </result>
-            <result name="login_failure">/WEB-INF/jsp/Login.jsp</result>
-        </action>
-        
-        <action name="createAccount" method="createAccount"
-            class="edu.toronto.ece1779.ec2.web.LoginAction">
-            <result name="user_login_success" type="redirectAction">
-            	<param name="actionName">enterUserUI</param>
-            	<param name="namespace">/</param>
-            </result>
-            <result name="login_failure">/WEB-INF/jsp/Login.jsp</result>
-        </action>
-        
-         <action name="enterUserUI" method="enterUserUI"
-            class="edu.toronto.ece1779.ec2.web.UserAction">
-            <result name="user_authenticate_success">/WEB-INF/jsp/User.jsp</result>
-            <result name="user_authenticate_failure">/WEB-INF/jsp/Login.jsp</result>
-        </action>
-        
-        <action name="uploadImage" method="uploadImage" 
-            class="edu.toronto.ece1779.ec2.web.UserAction">
-            <result name="user_authenticate_failure">/WEB-INF/jsp/Login.jsp</result>
-            <result name="file_upload_success" type="redirectAction">
-            	<param name="actionName">enterUserUI</param>
-            	<param name="namespace">/</param>
-            </result>
-            <result name="file_upload_failure" type="redirectAction">
-            	<param name="actionName">enterUserUI</param>
-            	<param name="namespace">/</param>
-            </result>
-        </action>
-        
-        <action name="seeImage" method="seeImage"
-            class="edu.toronto.ece1779.ec2.web.UserAction">
-            <result name="success">/WEB-INF/jsp/Image.jsp</result>
-            <result name="error">/WEB-INF/jsp/Login.jsp</result>
-        </action>
-        
-        
-        <action name="adjustWorkerPool" method="adjustWorkerPool"
-            class="edu.toronto.ece1779.ec2.web.ManagerAction">
-            <result name="success">/WEB-INF/jsp/Manager.jsp</result>
-            <result name="error">/WEB-INF/jsp/Manager.jsp</result>
-        </action>
-        
-        <action name="configure" method="configure"
-            class="edu.toronto.ece1779.ec2.web.ManagerAction">
-            <result name="success">/WEB-INF/jsp/Manager.jsp</result>
-            <result name="error">/WEB-INF/jsp/Manager.jsp</result>
-        </action>     
-        
-        <action name="refresh" method="refresh"
-            class="edu.toronto.ece1779.ec2.web.ManagerAction">
-            <result name="success">/WEB-INF/jsp/Manager.jsp</result>
-            <result name="error">/WEB-INF/jsp/Manager.jsp</result>
-        </action>              
-        
-    </package>
+	<constant name="struts.enable.DynamicMethodInvocation" value="false" />
+	<constant name="struts.devMode" value="false" />
+	<constant name="struts.custom.i18n.resources" value="ApplicationResources" />
+
+	<package name="default" extends="struts-default" namespace="/">
+		<action name="login" method="authenticate"
+			class="edu.toronto.ece1779.ec2.web.LoginAction">
+			<result name="manager_login_success">/WEB-INF/jsp/Manager.jsp</result>
+			<result name="user_login_success" type="redirectAction">
+				<param name="actionName">enterUserUI</param>
+				<param name="namespace">/</param>
+			</result>
+			<result name="login_failure">/WEB-INF/jsp/Login.jsp</result>
+		</action>
+
+		<action name="createAccount" method="createAccount"
+			class="edu.toronto.ece1779.ec2.web.LoginAction">
+			<result name="user_login_success" type="redirectAction">
+				<param name="actionName">enterUserUI</param>
+				<param name="namespace">/</param>
+			</result>
+			<result name="login_failure">/WEB-INF/jsp/Login.jsp</result>
+		</action>
+
+		<action name="enterUserUI" method="enterUserUI"
+			class="edu.toronto.ece1779.ec2.web.UserAction">
+			<result name="user_authenticate_success">/WEB-INF/jsp/User.jsp</result>
+			<result name="user_authenticate_failure">/WEB-INF/jsp/Login.jsp</result>
+		</action>
+
+		<action name="uploadImage" method="uploadImage"
+			class="edu.toronto.ece1779.ec2.web.UserAction">
+			<result name="user_authenticate_failure">/WEB-INF/jsp/Login.jsp</result>
+			<result name="file_upload_success" type="redirectAction">
+				<param name="actionName">enterUserUI</param>
+				<param name="namespace">/</param>
+			</result>
+			<result name="file_upload_failure" type="redirectAction">
+				<param name="actionName">enterUserUI</param>
+				<param name="namespace">/</param>
+			</result>
+		</action>
+
+		<action name="FileUpload" method="uploadImageWithoutLogin"
+			class="edu.toronto.ece1779.ec2.web.UserAction">
+			<result name="file_upload_success" type="redirectAction">
+				<param name="actionName">enterUserUI</param>
+				<param name="namespace">/</param>
+			</result>
+			<result name="file_upload_failure" type="redirectAction">
+				<param name="actionName">enterUserUI</param>
+				<param name="namespace">/</param>
+			</result>
+		</action>
+
+		<action name="seeImage" method="seeImage"
+			class="edu.toronto.ece1779.ec2.web.UserAction">
+			<result name="success">/WEB-INF/jsp/Image.jsp</result>
+			<result name="error">/WEB-INF/jsp/Login.jsp</result>
+		</action>
+
+
+		<action name="adjustWorkerPool" method="adjustWorkerPool"
+			class="edu.toronto.ece1779.ec2.web.ManagerAction">
+			<result name="success">/WEB-INF/jsp/Manager.jsp</result>
+			<result name="error">/WEB-INF/jsp/Manager.jsp</result>
+		</action>
+
+		<action name="configure" method="configure"
+			class="edu.toronto.ece1779.ec2.web.ManagerAction">
+			<result name="success">/WEB-INF/jsp/Manager.jsp</result>
+			<result name="error">/WEB-INF/jsp/Manager.jsp</result>
+		</action>
+
+		<action name="refresh" method="refresh"
+			class="edu.toronto.ece1779.ec2.web.ManagerAction">
+			<result name="success">/WEB-INF/jsp/Manager.jsp</result>
+			<result name="error">/WEB-INF/jsp/Manager.jsp</result>
+		</action>
+
+	</package>
 </struts>

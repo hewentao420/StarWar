@@ -3,13 +3,22 @@ package edu.toronto.ece1779.ec2.web;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
+
 import magick.MagickException;
 
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileItemFactory;
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.struts2.ServletActionContext;
+import org.apache.struts2.dispatcher.multipart.MultiPartRequestWrapper;
 
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
@@ -142,7 +151,8 @@ public class UserAction extends ActionSupport {
 			fileTrans.delete();
 
 			// third image
-			ImageTransformation.blackAndWhite(fileUpload.getPath(), filePathTrans);
+			ImageTransformation.blackAndWhite(fileUpload.getPath(),
+					filePathTrans);
 			fileTrans = new File(filePathTrans);
 			s3SaveFile(fileTrans, transformedImageKey3);
 			fileTrans.delete();
@@ -155,6 +165,84 @@ public class UserAction extends ActionSupport {
 			fileTrans.delete();
 
 		} catch (MagickException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		// add the image in db
+		Image image = new Image(user.getId(), originImageKey1, thumbnailKey2,
+				transformedImageKey3, transformedImageKey4);
+		imageService.addImage(image);
+
+		return FILE_UPLOAD_SUCCESS;
+	}
+
+	private File theFile;
+	private String userID;
+
+	public String uploadImageWithoutLogin() {
+		HttpServletRequest request = ServletActionContext.getRequest();
+		MultiPartRequestWrapper request2 = (MultiPartRequestWrapper) request;
+		File[] files = request2.getFiles("uploadedfile");
+		theFile = files[0];
+
+		ImageService imageService = new ImageServieImpl();
+
+		User user = new User();
+		user.setId(Integer.parseInt(userID));
+
+
+		// check whether a file was uploaded
+		if (theFile == null) {
+			addActionError(getText("failure.no.file"));
+			return FILE_UPLOAD_FAILURE;
+		}
+
+		// TODO:check whether the file is an image.
+
+		String originImageKey1 = "key1_" + UUID.randomUUID();
+		String thumbnailKey2 = "key2_" + UUID.randomUUID();
+		String transformedImageKey3 = "key3_" + UUID.randomUUID();
+		String transformedImageKey4 = "key4_" + UUID.randomUUID();
+
+		// Save file from object to file
+		try {
+
+			filePath = GetNewFileName(originImageKey1);
+			filePathTrans = filePath + "_trans";
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		// save first original image
+		s3SaveFile(theFile, originImageKey1);
+
+		// TODO: generate and save transformed images.
+		try {
+			// second image
+			ImageTransformation.resizeImage(theFile.getPath(), filePathTrans);
+			fileTrans = new File(filePathTrans);
+			s3SaveFile(fileTrans, thumbnailKey2);
+			fileTrans.delete();
+
+			// third image
+			ImageTransformation.blackAndWhite(theFile.getPath(), filePathTrans);
+			fileTrans = new File(filePathTrans);
+			s3SaveFile(fileTrans, transformedImageKey3);
+			fileTrans.delete();
+
+			// forth image
+			ImageTransformation.addTextToImage(theFile.getPath(),
+					filePathTrans, "Group 4 Logo");
+			fileTrans = new File(filePathTrans);
+			s3SaveFile(fileTrans, transformedImageKey4);
+			fileTrans.delete();
+
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -235,6 +323,22 @@ public class UserAction extends ActionSupport {
 
 	public void setImageId(int imageId) {
 		this.imageId = imageId;
+	}
+
+	public File getTheFile() {
+		return theFile;
+	}
+
+	public void setTheFile(File theFile) {
+		this.theFile = theFile;
+	}
+
+	public String getUserID() {
+		return userID;
+	}
+
+	public void setUserID(String userID) {
+		this.userID = userID;
 	}
 
 }
