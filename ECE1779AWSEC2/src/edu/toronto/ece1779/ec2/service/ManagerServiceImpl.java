@@ -25,6 +25,9 @@ import com.amazonaws.services.ec2.model.Reservation;
 import com.amazonaws.services.ec2.model.RunInstancesRequest;
 import com.amazonaws.services.ec2.model.StartInstancesRequest;
 import com.amazonaws.services.ec2.model.StopInstancesRequest;
+import com.amazonaws.services.elasticloadbalancing.AmazonElasticLoadBalancingClient;
+import com.amazonaws.services.elasticloadbalancing.model.RegisterInstancesWithLoadBalancerRequest;
+import com.amazonaws.services.elasticloadbalancing.model.RegisterInstancesWithLoadBalancerResult;
 
 import edu.toronto.ece1779.awsAccess.AwsAccessManager;
 import edu.toronto.ece1779.ec2.dao.ManagerDAO;
@@ -82,7 +85,7 @@ public class ManagerServiceImpl implements ManagerService {
             	statisticsRequest.setDimensions(dimensions);
             	Date endTime = new Date();
             	Date startTime = new Date();
-            	startTime.setTime(endTime.getTime()-120);
+            	startTime.setTime(endTime.getTime()-600000);
             	statisticsRequest.setStartTime(startTime);
             	statisticsRequest.setEndTime(endTime);
             	statisticsRequest.setPeriod(60);
@@ -94,7 +97,7 @@ public class ManagerServiceImpl implements ManagerService {
             	System.out.print("Namespace = " + namespace + " Metric = " + metricName + " Dimensions = " + dimensions);
             	System.out.print("Values = " + stats.toString());
             	
-            	if(stats.getDatapoints().size()>0) {
+            	if(stats.getDatapoints().size()>0 && metric.getDimensions()!=null && metric.getDimensions().size()>0 && metric.getDimensions().get(0)!=null && stats.getDatapoints().get(0)!=null) {
             		cpuUsageMap.put(metric.getDimensions().get(0).getValue(), stats.getDatapoints().get(0).getMaximum());
             	}
             }
@@ -206,6 +209,29 @@ public class ManagerServiceImpl implements ManagerService {
 		}
 	}
     
+	
+	//To be completed
+	public void addInstancesToLoadBalancer(List<String> ids) {
+		BasicAWSCredentials credentials = AwsAccessManager.getInstance().getAWSCredentials();
+		AmazonElasticLoadBalancingClient elb = new AmazonElasticLoadBalancingClient(credentials);
+//        CreateLoadBalancerRequest lbRequest = new CreateLoadBalancerRequest();
+//        lbRequest.setLoadBalancerName("Group4Balancer");
+//        List<Listener> listeners = new ArrayList<Listener>(1);
+//        listeners.add(new Listener("HTTP", 8080, 8080));
+//        lbRequest.withAvailabilityZones("us-east-1b");
+//        lbRequest.setListeners(listeners);
+//
+//        CreateLoadBalancerResult lbResult=elb.createLoadBalancer(lbRequest);
+//        System.out.println("created load balancer Group4Balancer");	    
+        List<com.amazonaws.services.elasticloadbalancing.model.Instance> instanceIds = new ArrayList<com.amazonaws.services.elasticloadbalancing.model.Instance>();
+        instanceIds.add(new com.amazonaws.services.elasticloadbalancing.model.Instance("i-a82ec6db"));
+        instanceIds.add(new com.amazonaws.services.elasticloadbalancing.model.Instance("i-2a71ea59"));
+        
+        RegisterInstancesWithLoadBalancerRequest register =new RegisterInstancesWithLoadBalancerRequest();
+        register.setLoadBalancerName("Group4Balancer");
+        register.setInstances(instanceIds);
+        RegisterInstancesWithLoadBalancerResult registerWithLoadBalancerResult= elb.registerInstancesWithLoadBalancer(register);
+	}
     
 	private AmazonEC2 getEC2() {
 		BasicAWSCredentials awsCredentials = AwsAccessManager.getInstance().getAWSCredentials();

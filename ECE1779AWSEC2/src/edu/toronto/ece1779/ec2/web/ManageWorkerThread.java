@@ -1,8 +1,21 @@
 package edu.toronto.ece1779.ec2.web;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.services.elasticloadbalancing.AmazonElasticLoadBalancingClient;
+import com.amazonaws.services.elasticloadbalancing.model.CreateLoadBalancerRequest;
+import com.amazonaws.services.elasticloadbalancing.model.CreateLoadBalancerResult;
+import com.amazonaws.services.elasticloadbalancing.model.Instance;
+import com.amazonaws.services.elasticloadbalancing.model.Listener;
+import com.amazonaws.services.elasticloadbalancing.model.RegisterInstancesWithLoadBalancerRequest;
+import com.amazonaws.services.elasticloadbalancing.model.RegisterInstancesWithLoadBalancerResult;
+
+import edu.toronto.ece1779.awsAccess.AwsAccessManager;
 import edu.toronto.ece1779.ec2.entity.ManagerConfig;
 import edu.toronto.ece1779.ec2.service.ManagerService;
 import edu.toronto.ece1779.ec2.service.ManagerServiceImpl;
@@ -12,17 +25,20 @@ public class ManageWorkerThread implements Runnable{
 	public void run() {
         try{
        	 ManagerService managerService = new ManagerServiceImpl();
-   		 
+       	
        	 while(true) {
     		ManagerConfig config = managerService.retrieveManagerConfig();
 
        		 Map<String, Double> cpuUsageMap = managerService.retrieveCPUUsageMap();
-       		 double cpuUsage = 0;
-       		 Iterator<String> itr = cpuUsageMap.keySet().iterator();
-       		 while(itr.hasNext()){
-       			 String id = (String)itr.next();
-       			 cpuUsage = (double)cpuUsageMap.get(id);
-       			 break;
+       		 double cpuUsage = 0;       		 
+       		 double total = 0;
+       		 Set<String> keys = cpuUsageMap.keySet();
+       		 for(Iterator<String> i = keys.iterator(); i.hasNext();) {
+       			 double value = (Double)cpuUsageMap.get((String)i.next());
+       			 total = total + value;
+       		 }
+       		 if(cpuUsageMap.size() != 0) {
+       			 cpuUsage = total/cpuUsageMap.size();
        		 }
        		 
        		 System.out.println("ManageWorkerListener:");
@@ -61,6 +77,5 @@ public class ManageWorkerThread implements Runnable{
        	 System.out.println("Error Message: " + e.getMessage());
         }
 	}
-	
 	
 }
