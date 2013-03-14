@@ -22,4 +22,6 @@ public interface ManagerService {
 	
 	public ManagerConfig retrieveManagerConfig();
 	
+	public void addOrRemoveInstancesToLoadBalancer(List<String> ids, boolean add);
+	
 }

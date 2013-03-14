@@ -23,17 +23,20 @@ import com.amazonaws.services.ec2.AmazonEC2Client;
 import com.amazonaws.services.ec2.model.Instance;
 import com.amazonaws.services.ec2.model.Reservation;
 import com.amazonaws.services.ec2.model.RunInstancesRequest;
+import com.amazonaws.services.ec2.model.RunInstancesResult;
 import com.amazonaws.services.ec2.model.StartInstancesRequest;
 import com.amazonaws.services.ec2.model.StopInstancesRequest;
 import com.amazonaws.services.elasticloadbalancing.AmazonElasticLoadBalancingClient;
+import com.amazonaws.services.elasticloadbalancing.model.DeregisterInstancesFromLoadBalancerRequest;
 import com.amazonaws.services.elasticloadbalancing.model.RegisterInstancesWithLoadBalancerRequest;
-import com.amazonaws.services.elasticloadbalancing.model.RegisterInstancesWithLoadBalancerResult;
 
 import edu.toronto.ece1779.awsAccess.AwsAccessManager;
 import edu.toronto.ece1779.ec2.dao.ManagerDAO;
 import edu.toronto.ece1779.ec2.dao.ManagerDAOImpl;
 import edu.toronto.ece1779.ec2.entity.ManagerConfig;
 import edu.toronto.ece1779.ec2.entity.Worker;
+import edu.toronto.ece1779.ec2.web.ManageWorkerThread;
+import edu.toronto.ece1779.ec2.web.UpdateBalancerThread;
 
 public class ManagerServiceImpl implements ManagerService {
 	
@@ -177,7 +180,12 @@ public class ManagerServiceImpl implements ManagerService {
 		try{
 			RunInstancesRequest request = new RunInstancesRequest(IMAGE_ID, number, number);
 			request.setKeyName(KEY_PAIR_NAME);
-			ec2.runInstances(request);
+			RunInstancesResult result = ec2.runInstances(request);
+			List<Instance> instances = result.getReservation().getInstances();
+			
+			UpdateBalancerThread updateBalancerThread = new UpdateBalancerThread(instances);
+			new Thread(updateBalancerThread).start();
+			
 		} catch (AmazonClientException ace) {
             System.out.println("Error Message: " + ace.getMessage());
 		}
@@ -190,6 +198,7 @@ public class ManagerServiceImpl implements ManagerService {
 		try{
 			StartInstancesRequest request = new StartInstancesRequest();
 			request.setInstanceIds(ids);
+			addOrRemoveInstancesToLoadBalancer(ids, true);
 			ec2.startInstances(request);
 		} catch(AmazonClientException ace) {
             System.out.println("Error Message: " + ace.getMessage());
@@ -203,6 +212,7 @@ public class ManagerServiceImpl implements ManagerService {
 		try{
 			StopInstancesRequest request = new StopInstancesRequest();
 			request.setInstanceIds(ids);
+			addOrRemoveInstancesToLoadBalancer(ids, false);
 			ec2.stopInstances(request);
 		} catch(AmazonClientException ace) {
             System.out.println("Error Message: " + ace.getMessage());
@@ -210,8 +220,7 @@ public class ManagerServiceImpl implements ManagerService {
 	}
     
 	
-	//To be completed
-	public void addInstancesToLoadBalancer(List<String> ids) {
+	public void addOrRemoveInstancesToLoadBalancer(List<String> ids, boolean add) {
 		BasicAWSCredentials credentials = AwsAccessManager.getInstance().getAWSCredentials();
 		AmazonElasticLoadBalancingClient elb = new AmazonElasticLoadBalancingClient(credentials);
 //        CreateLoadBalancerRequest lbRequest = new CreateLoadBalancerRequest();
@@ -220,17 +229,28 @@ public class ManagerServiceImpl implements ManagerService {
 //        listeners.add(new Listener("HTTP", 8080, 8080));
 //        lbRequest.withAvailabilityZones("us-east-1b");
 //        lbRequest.setListeners(listeners);
-//
 //        CreateLoadBalancerResult lbResult=elb.createLoadBalancer(lbRequest);
 //        System.out.println("created load balancer Group4Balancer");	    
         List<com.amazonaws.services.elasticloadbalancing.model.Instance> instanceIds = new ArrayList<com.amazonaws.services.elasticloadbalancing.model.Instance>();
-        instanceIds.add(new com.amazonaws.services.elasticloadbalancing.model.Instance("i-a82ec6db"));
-        instanceIds.add(new com.amazonaws.services.elasticloadbalancing.model.Instance("i-2a71ea59"));
+//        instanceIds.add(new com.amazonaws.services.elasticloadbalancing.model.Instance("i-a82ec6db"));
+//        instanceIds.add(new com.amazonaws.services.elasticloadbalancing.model.Instance("i-2a71ea59"));      
+        if(ids != null) {
+        	for(int i=0; i<ids.size(); i++) {
+                	instanceIds.add(new com.amazonaws.services.elasticloadbalancing.model.Instance(ids.get(i))); 
+                }
+        }
         
-        RegisterInstancesWithLoadBalancerRequest register =new RegisterInstancesWithLoadBalancerRequest();
-        register.setLoadBalancerName("Group4Balancer");
-        register.setInstances(instanceIds);
-        RegisterInstancesWithLoadBalancerResult registerWithLoadBalancerResult= elb.registerInstancesWithLoadBalancer(register);
+        if(add) {
+            RegisterInstancesWithLoadBalancerRequest register =new RegisterInstancesWithLoadBalancerRequest();
+            register.setLoadBalancerName("Group4Balancer");
+            register.setInstances(instanceIds);
+            elb.registerInstancesWithLoadBalancer(register);
+        } else {
+        	DeregisterInstancesFromLoadBalancerRequest deregister =new DeregisterInstancesFromLoadBalancerRequest();
+            deregister.setLoadBalancerName("Group4Balancer");
+            deregister.setInstances(instanceIds);
+            elb.deregisterInstancesFromLoadBalancer(deregister);
+        }
 	}
     
 	private AmazonEC2 getEC2() {
