@@ -1,21 +1,9 @@
 package edu.toronto.ece1779.ec2.web;
 
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.services.elasticloadbalancing.AmazonElasticLoadBalancingClient;
-import com.amazonaws.services.elasticloadbalancing.model.CreateLoadBalancerRequest;
-import com.amazonaws.services.elasticloadbalancing.model.CreateLoadBalancerResult;
-import com.amazonaws.services.elasticloadbalancing.model.Instance;
-import com.amazonaws.services.elasticloadbalancing.model.Listener;
-import com.amazonaws.services.elasticloadbalancing.model.RegisterInstancesWithLoadBalancerRequest;
-import com.amazonaws.services.elasticloadbalancing.model.RegisterInstancesWithLoadBalancerResult;
-
-import edu.toronto.ece1779.awsAccess.AwsAccessManager;
 import edu.toronto.ece1779.ec2.entity.ManagerConfig;
 import edu.toronto.ece1779.ec2.service.ManagerService;
 import edu.toronto.ece1779.ec2.service.ManagerServiceImpl;
@@ -37,8 +25,11 @@ public class ManageWorkerThread implements Runnable{
        			 double value = (Double)cpuUsageMap.get((String)i.next());
        			 total = total + value;
        		 }
-       		 if(cpuUsageMap.size() != 0) {
-       			 cpuUsage = total/cpuUsageMap.size();
+       		
+       		 int divide = managerService.retrieveRunningWorkersInfo().size();
+       		 if(divide != 0) {
+       			 cpuUsage = total/divide;
+       			 System.out.println("CPU usage divided by: " + divide);
        		 }
        		 
        		 System.out.println("ManageWorkerListener:");
@@ -70,7 +61,7 @@ public class ManageWorkerThread implements Runnable{
        			 }
        		 }
        	
-       		Thread.sleep(30000);//TODO need to make this number bigger
+       		Thread.sleep(90000);//TODO need to make this number bigger
        		System.out.println("ManageWorkerListener: sleeping...");
        	 }
         } catch(Exception e) {
