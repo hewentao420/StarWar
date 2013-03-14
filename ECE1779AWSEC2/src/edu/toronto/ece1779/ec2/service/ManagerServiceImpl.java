@@ -142,7 +142,7 @@ public class ManagerServiceImpl implements ManagerService {
     	List<Worker> notRunningWorkers = new ArrayList<Worker>();
     	
     	for(int i=0; i<workers.size(); i++) {
-    		if(!("running".equals(workers.get(i).getStatus()))) {
+    		if(!("running".equals(workers.get(i).getStatus())) && !("terminated".equals(workers.get(i).getStatus()))) {
     			notRunningWorkers.add(workers.get(i));
     		}
     	}
