@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" id="WebApp_ID" version="2.5">
   <display-name>ECE1779AWSEC2</display-name>
-
   <context-param>
     <param-name>managerName</param-name>
     <param-value>Bill</param-value>
@@ -10,23 +9,33 @@
     <param-name>managerPassword</param-name>
     <param-value>12345</param-value>
   </context-param>
-    
+  
+  <servlet>
+    <description></description>
+    <display-name>FileUpload</display-name>
+    <servlet-name>FileUpload</servlet-name>
+    <servlet-class>edu.toronto.ece1779.servlet.FileUpload</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>FileUpload</servlet-name>
+    <url-pattern>/ece1779/servlet/FileUpload</url-pattern>
+  </servlet-mapping>
+  
   <filter>
-      <filter-name>struts2</filter-name>
-      <filter-class>
+    <filter-name>struts2</filter-name>
+    <filter-class>
           org.apache.struts2.dispatcher.FilterDispatcher
       </filter-class>
   </filter>
   <filter-mapping>
-      <filter-name>struts2</filter-name>
-      <url-pattern>/*</url-pattern>
-  </filter-mapping>  
-  
+    <filter-name>struts2</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
   <listener>
-  	<listener-class>edu.toronto.ece1779.ec2.web.ManageWorkerListener</listener-class>
+    <listener-class>edu.toronto.ece1779.ec2.web.ManageWorkerListener</listener-class>
   </listener>
-  
   <welcome-file-list>
-  <welcome-file>/jsp/Login.jsp</welcome-file>
+    <welcome-file>/jsp/Login.jsp</welcome-file>
   </welcome-file-list>
+  
 </web-app>
